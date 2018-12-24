@@ -347,6 +347,9 @@ bbblelrg:
 	idle:
 		Length: *
 
+empbomb:
+	idle:
+
 missile:
 	idle:
 		Facings: 32
