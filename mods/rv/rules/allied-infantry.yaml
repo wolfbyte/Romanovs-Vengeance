@@ -163,6 +163,9 @@ e1:
 		HP: 125
 	Mobile:
 		RequiresCondition: !chronodisable && undeployed
+	Garrisoner:
+		PipType: Green
+		CargoType: Garrisoner
 	Passenger:
 		PipType: Green
 		CargoType: Garrisoner
