@@ -25,7 +25,7 @@ namespace OpenRA.Mods.RA2.Traits
     [Desc("This actor can transport Garrisoner actors.")]
     public class GarrisonInfo : ITraitInfo, Requires<IOccupySpaceInfo>
     {
-        [Desc("The maximum sum of Passenger.Weight that this actor can support.")]
+        [Desc("The maximum sum of Garrisoner.Weight that this actor can support.")]
         public readonly int MaxWeight = 0;
 
         [Desc("Number of pips to display when this actor is selected.")]
@@ -33,32 +33,32 @@ namespace OpenRA.Mods.RA2.Traits
 
         //TODO - darky - Refactor - Do we need types? 
         //darky - Could this be where we can add vehicle garrisons, for the TankBunker?
-        [Desc("`Passenger.GarrisonType`s that can be loaded into this actor.")]
+        [Desc("`Garrisoner.GarrisonType`s that can be loaded into this actor.")]
         public readonly HashSet<string> Types = new HashSet<string>();
 
         [Desc("A list of actor types that are initially spawned into this actor.")]
         public readonly string[] InitialUnits = { };
 
-        [Desc("When this actor is sold should all of its passengers be unloaded?")]
+        [Desc("When this actor is sold should all of its garrisoners be unloaded?")]
         public readonly bool EjectOnSell = true;
 
-        [Desc("When this actor dies should all of its passengers be unloaded?")]
+        [Desc("When this actor dies should all of its garrisoners be unloaded?")]
         public readonly bool EjectOnDeath = false;
 
         [Desc("Terrain types that this actor is allowed to eject actors onto. Leave empty for all terrain types.")]
         public readonly HashSet<string> UnloadTerrainTypes = new HashSet<string>();
 
-        [Desc("Voice to play when ordered to unload the passengers.")]
+        [Desc("Voice to play when ordered to unload the garrisoners.")]
         [VoiceReference] public readonly string UnloadVoice = "Action";
 
         //darky - Needs Attention - Rename to GarrisonerFacing
-        [Desc("Which direction the passenger will face (relative to the transport) when unloading.")]
-        public readonly int PassengerFacing = 128;
+        [Desc("Which direction the garrisoner will face (relative to the transport) when unloading.")]
+        public readonly int GarrisonerFacing = 128;
 
-        [Desc("Cursor to display when able to unload the passengers.")]
+        [Desc("Cursor to display when able to unload the garrisoners.")]
         public readonly string UnloadCursor = "deploy";
 
-        [Desc("Cursor to display when unable to unload the passengers.")]
+        [Desc("Cursor to display when unable to unload the garrisoners.")]
         public readonly string UnloadBlockedCursor = "deploy-blocked";
 
         //darky - Needs Attention - How is loading condition used?
@@ -68,18 +68,18 @@ namespace OpenRA.Mods.RA2.Traits
 
         //darky - Needs Attention - How is loaded condition used? 
         [GrantedConditionReference]
-        [Desc("The condition to grant to self while passengers are loaded.",
-            "Condition can stack with multiple passengers.")]
+        [Desc("The condition to grant to self while garrisoners are loaded.",
+            "Condition can stack with multiple garrisoners.")]
         public readonly string LoadedCondition = null;
 
-        //darky - Refactor - How do Passenger Conditions work? Where are they used
+
         [Desc("Conditions to grant when specified actors are loaded inside the transport.",
             "A dictionary of [actor id]: [condition].")]
-        public readonly Dictionary<string, string> PassengerConditions = new Dictionary<string, string>();
+        public readonly Dictionary<string, string> GarrisonerConditions = new Dictionary<string, string>();
 
         //darky - Needs attention - What is a linter. How does it work. What are my responsibilities here?
         [GrantedConditionReference]
-        public IEnumerable<string> LinterPassengerConditions { get { return PassengerConditions.Values; } }
+        public IEnumerable<string> LinterGarrisonerConditions { get { return GarrisonerConditions.Values; } }
 
         public object Create(ActorInitializer init) { return new Garrison(init, this); }
     }
@@ -92,7 +92,7 @@ namespace OpenRA.Mods.RA2.Traits
         readonly Actor self;
         readonly Stack<Actor> garrison = new Stack<Actor>();
         readonly HashSet<Actor> reserves = new HashSet<Actor>();
-        readonly Dictionary<string, Stack<int>> passengerTokens = new Dictionary<string, Stack<int>>();
+        readonly Dictionary<string, Stack<int>> garrisonerTokens = new Dictionary<string, Stack<int>>();
         readonly Lazy<IFacing> facing;
         readonly bool checkTerrainType;
 
@@ -107,7 +107,7 @@ namespace OpenRA.Mods.RA2.Traits
         CPos currentCell;
         public IEnumerable<CPos> CurrentAdjacentCells { get; private set; }
         public bool Unloading { get; internal set; }
-        public IEnumerable<Actor> Passengers { get { return garrison; } }
+        public IEnumerable<Actor> Garrisoners { get { return garrison; } }
         public int GarrisonerCount { get { return garrison.Count; } }
 
         public Garrison(ActorInitializer init, GarrisonInfo info)
@@ -159,9 +159,9 @@ namespace OpenRA.Mods.RA2.Traits
             {
                 foreach (var c in garrison)
                 {
-                    string passengerCondition;
-                    if (Info.PassengerConditions.TryGetValue(c.Info.Name, out passengerCondition))
-                        passengerTokens.GetOrAdd(c.Info.Name).Push(conditionManager.GrantCondition(self, passengerCondition));
+                    string garrisonerCondition;
+                    if (Info.GarrisonerConditions.TryGetValue(c.Info.Name, out garrisonerCondition))
+                        garrisonerTokens.GetOrAdd(c.Info.Name).Push(conditionManager.GrantCondition(self, garrisonerCondition));
                 }
 
                 if (!string.IsNullOrEmpty(Info.LoadedCondition))
@@ -169,7 +169,7 @@ namespace OpenRA.Mods.RA2.Traits
             }
         }
 
-        static int GetWeight(Actor a) { return a.Info.TraitInfo<PassengerInfo>().Weight; }
+        static int GetWeight(Actor a) { return a.Info.TraitInfo<GarrisonerInfo>().Weight; }
 
         public IEnumerable<IOrderTargeter> Orders
         {
@@ -227,7 +227,7 @@ namespace OpenRA.Mods.RA2.Traits
             }
             // TODO - darky - Investigate - Remove Aircraft
             return !IsEmpty(self) && (aircraft == null || aircraft.CanLand(self.Location))
-                && CurrentAdjacentCells != null && CurrentAdjacentCells.Any(c => Passengers.Any(p => p.Trait<IPositionable>().CanEnterCell(c)));
+                && CurrentAdjacentCells != null && CurrentAdjacentCells.Any(c => Garrisoners.Any(p => p.Trait<IPositionable>().CanEnterCell(c)));
         }
 
         public bool CanLoad(Actor self, Actor a)
@@ -292,7 +292,7 @@ namespace OpenRA.Mods.RA2.Traits
 
             totalWeight -= GetWeight(a);
 
-            SetPassengerFacing(a);
+            SetGarrisonerFacing(a);
 
             foreach (var npe in self.TraitsImplementing<INotifyGarrisonerExited>())
                 npe.OnGarrisonerExited(self, a);
@@ -300,30 +300,30 @@ namespace OpenRA.Mods.RA2.Traits
             foreach (var nec in a.TraitsImplementing<INotifyExitedGarrison>())
                 nec.OnExitedGarrison(a, self);
 
-            var p = a.Trait<Passenger>();
+            var p = a.Trait<Garrisoner>();
             p.Transport = null;
 
-            Stack<int> passengerToken;
-            if (passengerTokens.TryGetValue(a.Info.Name, out passengerToken) && passengerToken.Any())
-                conditionManager.RevokeCondition(self, passengerToken.Pop());
+            Stack<int> garrisonerToken;
+            if (garrisonerTokens.TryGetValue(a.Info.Name, out garrisonerToken) && garrisonerToken.Any())
+                conditionManager.RevokeCondition(self, garrisonerToken.Pop());
 
             if (loadedTokens.Any())
                 conditionManager.RevokeCondition(self, loadedTokens.Pop());
 
             return a;
         }
-        //TODO - darky - Refactor SetPassengerFacing -> SetGarrisonerFacing
-        void SetPassengerFacing(Actor passenger)
+        //TODO - darky - Refactor SetGarrisonerFacing -> SetGarrisonerFacing
+        void SetGarrisonerFacing(Actor garrisoner)
         {
             if (facing.Value == null)
                 return;
 
-            var passengerFacing = passenger.TraitOrDefault<IFacing>();
-            if (passengerFacing != null)
-                passengerFacing.Facing = facing.Value.Facing + Info.PassengerFacing;
+            var garrisonerFacing = garrisoner.TraitOrDefault<IFacing>();
+            if (garrisonerFacing != null)
+                garrisonerFacing.Facing = facing.Value.Facing + Info.GarrisonerFacing;
 
-            foreach (var t in passenger.TraitsImplementing<Turreted>())
-                t.TurretFacing = facing.Value.Facing + Info.PassengerFacing;
+            foreach (var t in garrisoner.TraitsImplementing<Turreted>())
+                t.TurretFacing = facing.Value.Facing + Info.GarrisonerFacing;
         }
 
         public IEnumerable<PipType> GetPips(Actor self)
@@ -340,7 +340,7 @@ namespace OpenRA.Mods.RA2.Traits
 
             foreach (var c in garrison)
             {
-                var pi = c.Info.TraitInfo<PassengerInfo>();
+                var pi = c.Info.TraitInfo<GarrisonerInfo>();
                 if (n < pi.Weight)
                     return pi.PipType;
                 else
@@ -374,12 +374,12 @@ namespace OpenRA.Mods.RA2.Traits
                     nec.OnEnteredGarrison(a, self);
             }
 
-            var p = a.Trait<Passenger>();
+            var p = a.Trait<Garrisoner>();
             p.Transport = self;
 
-            string passengerCondition;
-            if (conditionManager != null && Info.PassengerConditions.TryGetValue(a.Info.Name, out passengerCondition))
-                passengerTokens.GetOrAdd(a.Info.Name).Push(conditionManager.GrantCondition(self, passengerCondition));
+            string garrisonerCondition;
+            if (conditionManager != null && Info.GarrisonerConditions.TryGetValue(a.Info.Name, out garrisonerCondition))
+                garrisonerTokens.GetOrAdd(a.Info.Name).Push(conditionManager.GrantCondition(self, garrisonerCondition));
 
             if (conditionManager != null && !string.IsNullOrEmpty(Info.LoadedCondition))
                 loadedTokens.Push(conditionManager.GrantCondition(self, Info.LoadedCondition));
@@ -390,21 +390,21 @@ namespace OpenRA.Mods.RA2.Traits
             if (Info.EjectOnDeath)
                 while (!IsEmpty(self) && CanUnload())
                 {
-                    var passenger = Unload(self);
+                    var garrisoner = Unload(self);
                     var cp = self.CenterPosition;
                     var inAir = self.World.Map.DistanceAboveTerrain(cp).Length != 0;
-                    var positionable = passenger.Trait<IPositionable>();
-                    positionable.SetPosition(passenger, self.Location);
+                    var positionable = garrisoner.Trait<IPositionable>();
+                    positionable.SetPosition(garrisoner, self.Location);
 
                     if (!inAir && positionable.CanEnterCell(self.Location, self, false))
                     {
-                        self.World.AddFrameEndTask(w => w.Add(passenger));
-                        var nbms = passenger.TraitsImplementing<INotifyBlockingMove>();
+                        self.World.AddFrameEndTask(w => w.Add(garrisoner));
+                        var nbms = garrisoner.TraitsImplementing<INotifyBlockingMove>();
                         foreach (var nbm in nbms)
-                            nbm.OnNotifyBlockingMove(passenger, passenger);
+                            nbm.OnNotifyBlockingMove(garrisoner, garrisoner);
                     }
                     else
-                        passenger.Kill(e.Attacker);
+                        garrisoner.Kill(e.Attacker);
                 }
 
             foreach (var c in garrison)
@@ -429,15 +429,15 @@ namespace OpenRA.Mods.RA2.Traits
                 return;
 
             while (!IsEmpty(self))
-                SpawnPassenger(Unload(self));
+                SpawnGarrisoner(Unload(self));
         }
-        // TODO - darky - Refactor SpawnPassenger -> SpawnGarrisoner
-        void SpawnPassenger(Actor passenger)
+
+        void SpawnGarrisoner(Actor garrisoner)
         {
             self.World.AddFrameEndTask(w =>
             {
-                w.Add(passenger);
-                passenger.Trait<IPositionable>().SetPosition(passenger, self.Location);
+                w.Add(garrisoner);
+                garrisoner.Trait<IPositionable>().SetPosition(garrisoner, self.Location);
 
                 // TODO: this won't work well for >1 actor as they should move towards the next enterable (sub) cell instead
             });
@@ -447,8 +447,8 @@ namespace OpenRA.Mods.RA2.Traits
         {
             if (garrison == null)
                 return;
-            // TODO - darky - Refactor - Fix: there are no passengers.
-            foreach (var p in Passengers)
+            // TODO - darky - Refactor - Fix: there are no garrisoners.
+            foreach (var p in Garrisoners)
                 p.ChangeOwner(newOwner);
         }
 
@@ -468,7 +468,7 @@ namespace OpenRA.Mods.RA2.Traits
                 foreach (var c in garrison)
                 {
                     // TODO - darky - Refactor ITick.Tick - Possible Crash
-                    c.Trait<Passenger>().Transport = self;
+                    c.Trait<Garrisoner>().Transport = self;
 
                     foreach (var npe in self.TraitsImplementing<INotifyGarrisonerEntered>())
                         npe.OnGarrisonerEntered(self, c);
@@ -490,8 +490,7 @@ namespace OpenRA.Mods.RA2.Traits
 
         void ITransformActorInitModifier.ModifyTransformActorInit(Actor self, TypeDictionary init)
         {
-            // TODO - darky - Refactor ITransformActorInitModifier
-            init.Add(new RuntimeGarrisonInit(Passengers.ToArray()));
+            init.Add(new RuntimeGarrisonInit(Garrisoners.ToArray()));
         }
     }
 

@@ -17,10 +17,10 @@ namespace OpenRA.Mods.RA2.Traits
 {
     public class ChangeOwnerOnGarrisonerInfo : ChangeOwnerInfo, ITraitInfo, Requires<GarrisonInfo>
     {
-        [Desc("The speech notification on enter first passenger on garrison.")]
+        [Desc("The speech notification on enter first garrisoner on garrison.")]
         public readonly string EnterNotification = null;
 
-        [Desc("The speech notification on exit last passenger on garrison")]
+        [Desc("The speech notification on exit last garrisoner on garrison")]
         public readonly string ExitNotification = null;
 
         public override object Create(ActorInitializer init) { return new ChangeOwnerOnGarrisoner(init.Self, this); }
@@ -39,24 +39,24 @@ namespace OpenRA.Mods.RA2.Traits
             originalOwner = self.Owner;
         }
 
-        void INotifyGarrisonerEntered.OnGarrisonerEntered(Actor self, Actor passenger)
+        void INotifyGarrisonerEntered.OnGarrisonerEntered(Actor self, Actor garrisoner)
         {
-            var newOwner = passenger.Owner;
+            var newOwner = garrisoner.Owner;
             if (self.Owner != originalOwner || self.Owner == newOwner)
                 return;
 
-            NeedChangeOwner(self, passenger, newOwner);
+            NeedChangeOwner(self, garrisoner, newOwner);
 
-            Game.Sound.PlayNotification(self.World.Map.Rules, passenger.Owner, "Speech", info.EnterNotification, newOwner.Faction.InternalName);
+            Game.Sound.PlayNotification(self.World.Map.Rules, garrisoner.Owner, "Speech", info.EnterNotification, newOwner.Faction.InternalName);
         }
 
-        void INotifyGarrisonerExited.OnGarrisonerExited(Actor self, Actor passenger)
+        void INotifyGarrisonerExited.OnGarrisonerExited(Actor self, Actor garrisoner)
         {
             if (garrison.GarrisonerCount > 0)
                 return;
 
-            Game.Sound.PlayNotification(self.World.Map.Rules, passenger.Owner, "Speech", info.ExitNotification, passenger.Owner.Faction.InternalName);
-            NeedChangeOwner(self, passenger, originalOwner);
+            Game.Sound.PlayNotification(self.World.Map.Rules, garrisoner.Owner, "Speech", info.ExitNotification, garrisoner.Owner.Faction.InternalName);
+            NeedChangeOwner(self, garrisoner, originalOwner);
         }
     }
 }

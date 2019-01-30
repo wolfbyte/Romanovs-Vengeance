@@ -30,7 +30,7 @@ namespace OpenRA.Mods.RA2.Activities
             this.garrisonableBuilding = garrisonableBuilding;
             this.maxTries = maxTries;
             garrison = garrisonableBuilding.Trait<Garrison>();
-            garrisoner = self.TraitsImplementing<Garrisoner>().Single();
+            garrisoner = self.TraitsImplementing<Garrisoner>().First();
            // garrisoner = self.TraitsImplementing<Garrisoner>().Single(p => garrison.Info.Types.Contains(p.Info.GarrisonType));
         }
 

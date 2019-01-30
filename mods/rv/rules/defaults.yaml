@@ -687,6 +687,8 @@
 	-Sellable:
 	-UpdatesPlayerStatistics:
 	-WithMakeAnimation:
+	-Repairable
+	Inherits@AUTOTARGET: ^AutoTargetGround
 	ChangeOwnerOnGarrisoner:
 	Garrison:
 		Types: Garrisoner

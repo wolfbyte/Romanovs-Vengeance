@@ -67,7 +67,6 @@
     <Compile Include="Traits\AttackGarrisonedRV.cs" />
     <Compile Include="Traits\ChangeOwner.cs" />
     <Compile Include="Traits\ChangeOwnerOnGarrisoner.cs" />
-    <Compile Include="Traits\ChangeOwnerOnPassenger.cs" />
     <Compile Include="Traits\ChronoResourceDelivery.cs" />
     <Compile Include="Traits\Conditions\GrantTimedConditionOnDeploy.cs" />
     <Compile Include="Traits\Garrison.cs" />
