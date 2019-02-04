@@ -158,6 +158,7 @@ namespace OpenRA.Mods.RA2.Traits
 
             // Enter orders are only valid for own/allied actors,
             // which are guaranteed to never be frozen.
+            // darky - frozen actor problem probably here.
             if (order.Target.Type != TargetType.Actor)
                 return;
 
