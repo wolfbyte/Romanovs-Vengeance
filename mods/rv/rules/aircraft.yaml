@@ -182,7 +182,7 @@ orca:
 	DamagedByTintedCells:
 		RequiresCondition: !airborne
 	Valued:
-		Cost: 1200
+		Cost: 1500
 	Tooltip:
 		Name: Harrier
 	Buildable:
@@ -219,8 +219,8 @@ orca:
 	Targetable@MC:
 		RequiresCondition: !controlled && !airborne
 	AmmoPool:
-		Ammo: 1
-		PipCount: 1
+		Ammo: 2
+		PipCount: 2
 		PipType: Ammo
 		PipTypeEmpty: AmmoEmpty
 		AmmoCondition: ammo
@@ -258,13 +258,14 @@ beag:
 	Buildable:
 		BuildPaletteOrder: 30
 		Prerequisites: ~aircraft.korea
+		Description: Aircraft armed with EMP bomb\n  Strong vs Buildings, Vehicles\n  Weak vs Infantry, Aircraft
 	SpawnActorOnDeath:
 		Actor: beaghusk
 	Armament:
-		Weapon: Maverick2
+		Weapon: EMPulseBEagle
 	AmmoPool:
-		Ammo: 2
-		PipCount: 2
+		Ammo: 1
+		PipCount: 1
 	Health:
 		HP: 200
 	Voiced:
@@ -531,8 +532,8 @@ spyp:
 	Armor:
 		Type: Light
 	RenderSprites:
- 	WithVoxelWalkerBody:
- 		TickRate: 1
+	WithVoxelWalkerBody:
+		TickRate: 1
 	SpawnActorOnDeath:
 		Actor: spyphusk
 	HitShape:
@@ -566,18 +567,22 @@ schp:
 		Type: Light
 	Armament@primary:
 		Weapon: SiegeChopperCannon
-		RequiresCondition: (airborne || !deployed) && !rank-elite
+		PauseOnCondition: !airborne && deployed
+		RequiresCondition: !rank-elite
 	Armament@elite:
 		Weapon: SiegeChopperCannonE
-		RequiresCondition: (airborne || !deployed) && rank-elite
+		PauseOnCondition: !airborne && deployed
+		RequiresCondition: rank-elite
 	Armament@deployed:
 		Weapon: 160mm
 		LocalOffset: 768,0,2048
-		RequiresCondition: !airborne && deployed && !rank-elite
+		PauseOnCondition: airborne || !actually-deployed
+		RequiresCondition: !rank-elite
 	Armament@elite-deployed:
 		Weapon: 160mmE
 		LocalOffset: 768,0,2048
-		RequiresCondition: !airborne && deployed && rank-elite
+		PauseOnCondition: airborne || !actually-deployed
+		RequiresCondition: rank-elite
 	Turreted:
 		TurnSpeed: 5
 	Voiced:
@@ -596,10 +601,10 @@ schp:
 		Type: CenterPosition
 	AttackAircraft:
 		Voice: Attack
-		RequiresCondition: airborne || !deployed
+		PauseOnCondition: !airborne && actually-deployed
 	AttackTurreted:
 		Voice: DeployedAttack
-		RequiresCondition: !airborne && deployed
+		PauseOnCondition: airborne || !actually-deployed
 	Aircraft:
 		CruiseAltitude: 3072
 		LandWhenIdle: false
@@ -608,11 +613,31 @@ schp:
 		Speed: 140
 		AltitudeVelocity: 120
 		CruisingCondition: cruising
-		LandOnCondition: deployed
+		LandOnCondition: deployed || (!airborne && !actually-undeployed)
 	GrantConditionOnDeploy:
+		Facing: 160
 		DeployedCondition: deployed
 		AllowedTerrainTypes: Clear, Rough, Road, DirtRoad, Ore, Gems
 		CanDeployOnRamps: true
+		PauseOnCondition: deployed && !actually-deployed
+	GrantConditionAfterDelay@deploy:
+		Delay: 37
+		ShowSelectionBar: false
+		Condition: actually-deployed
+		RequiresCondition: deployed && !airborne
+	GrantConditionAfterDelay@undeploy:
+		Delay: 37
+		ShowSelectionBar: false
+		Condition: actually-undeployed
+		RequiresCondition: !deployed && !airborne
+	WithIdleOverlay@Deploy:
+		Sequence: deploy
+		PauseOnCondition: !deployed || airborne || actually-deployed
+		RequiresCondition: deployed && !airborne && !actually-deployed
+	WithIdleOverlay@Undeploy:
+		Sequence: undeploy
+		PauseOnCondition: deployed || airborne || actually-undeployed
+		RequiresCondition: !deployed && !airborne && !actually-undeployed
 	RenderSprites:
 	Repairable:
 		Voice: Move
@@ -622,16 +647,16 @@ schp:
 	WithVoxelHelicopterBody:
 		TickRate: 1
 		ShowShadow: false
-		RequiresCondition: airborne || !deployed
+		RequiresCondition: airborne || (!deployed && actually-undeployed)
 	WithFacingSpriteBody:
 		Sequence: shadow
 		ForceToGround: true
-		RequiresCondition: airborne || !deployed
+		RequiresCondition: airborne || (!deployed && actually-undeployed)
 	WithVoxelBody:
 		Sequence: deployed
-		RequiresCondition: !airborne && deployed
+		RequiresCondition: !airborne && actually-deployed
 	WithVoxelTurret:
-		RequiresCondition: !airborne && deployed
+		RequiresCondition: !airborne && actually-deployed
 	Hovers@CRUISING:
 		RequiresCondition: cruising
 		OffsetModifier: -45
@@ -676,6 +701,7 @@ bpln:
 	-RevealsShroud:
 	-Selectable:
 	-SelectionDecorations:
+	-Targetable@Airborne:
 	RejectsOrders:
 	Interactable:
 	Aircraft:

@@ -68,6 +68,9 @@
     <Compile Include="Traits\ChangeOwner.cs" />
     <Compile Include="Traits\ChangeOwnerOnGarrisoner.cs" />
     <Compile Include="Traits\ChronoResourceDelivery.cs" />
+    <Compile Include="Traits\Conditions\GrantConditionAfterDelay.cs" />
+    <Compile Include="Traits\Conditions\GrantConditionOnCombatantOwner.cs" />
+    <Compile Include="Traits\Conditions\GrantConditionOnCapture.cs" />
     <Compile Include="Traits\Conditions\GrantTimedConditionOnDeploy.cs" />
     <Compile Include="Traits\Garrison.cs" />
     <Compile Include="Traits\Garrisoner.cs" />

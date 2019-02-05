@@ -68,9 +68,9 @@ BuildingExplode:
 KirovExplode:
 	Inherits: UnitExplode
 	Warhead@2Dam: SpreadDamage
-		Spread: 426
-		Damage: 75
-		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		Spread: 0c512
+		Damage: 750 # 250
+		Falloff: 100, 83, 67, 50, 0
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 
 ApocExplode:
@@ -196,6 +196,7 @@ TerrorBomb:
 		DamageTypes: Prone70Percent, TriggerProne, FlameDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: terrorist_explosion
+		ImpactSounds: gexpapoa.wav
 		ValidTargets: Ground, Water, Air
 
 CRTerrorBomb:
@@ -348,24 +349,6 @@ RadiationMissile:
 		Falloff: 100, 100
 		Level: 1500
 		MaxLevel: 1500
-
-EMPulse:
-	ReloadDelay: 10
-	Range: 1c0
-	Report: vkiratta.wav
-	Projectile: GravityBomb
-		Velocity: 0, 0, -50
-		Acceleration: 0, 0, -10
-		Image: empbomb
-		Palette: player
-		IsPlayerPalette: true
-	Warhead@1Dis: GrantExternalCondition
-		Range: 8c0
-		Duration: 375
-		Condition: emp
-	Warhead@2Eff: CreateEffect
-		Explosions: empulse
-		ExplosionPalette: tseffect
 
 MineExplosion:
 	Warhead@1Dam: SpreadDamage

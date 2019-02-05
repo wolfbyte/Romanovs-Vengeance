@@ -15,7 +15,7 @@ amcv:
 		Priority: 4
 		Bounds: 68, 56, 0, -7
 	Health:
-		HP: 1000
+		HP: 800
 	Armor:
 		Type: Heavy
 	Mobile:
@@ -55,7 +55,7 @@ cmin:
 		Prerequisites: refinery
 		Description: Gathers Ore.\n  Unarmed.\n  Immune to Radiation.\nSpecial ability: Can teleport to own refineries
 	Valued:
-		Cost: 1100
+		Cost: 1000
 	Tooltip:
 		Name: Chrono Miner
 	Selectable:
@@ -74,7 +74,7 @@ cmin:
 		WarpInSound: vchrtele.wav
 		WarpOutSound: vchrtele.wav
 	Health:
-		HP: 1000
+		HP: 800
 	Armor:
 		Type: Medium
 	SelfHealing:
@@ -630,7 +630,7 @@ bfrt:
 	Selectable:
 		Bounds: 72, 64, 0, -8
 	Health:
-		HP: 800
+		HP: 600
 	Armor:
 		Type: Heavy
 	Mobile:

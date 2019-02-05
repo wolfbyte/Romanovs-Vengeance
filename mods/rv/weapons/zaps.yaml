@@ -1,5 +1,22 @@
 ElectricBolt:
 	Inherits: ^TeslaZap
+	Range: 3c0
+	ReloadDelay: 60
+	Warhead@1Dam: SpreadDamage
+		Spread: 120
+		Damage: 50
+		Versus:
+			None: 100
+			Flak: 100
+			Plate: 100
+			Light: 85
+			Medium: 100
+			Heavy: 100
+			Wood: 50
+			Steel: 85
+			Concrete: 40
+			Drone: 200
+			Rocket: 100
 
 ElectricBoltE:
 	Inherits: ElectricBolt
@@ -56,6 +73,18 @@ CoilBolt:
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
 		Damage: 150
+		Versus:
+			None: 100
+			Flak: 100
+			Plate: 100
+			Light: 100
+			Medium: 100
+			Heavy: 100
+			Wood: 100
+			Steel: 100
+			Concrete: 90
+			Drone: 200
+			Rocket: 100
 
 OPCoilBolt:
 	Inherits: CoilBolt
@@ -163,15 +192,15 @@ PrismShot:
 		Spread: 42
 		Damage: 120
 		Versus:
-			None: 200
-			Flak: 100
-			Plate: 100
+			None: 60
+			Flak: 60
+			Plate: 60
 			Light: 100
 			Medium: 100
-			Heavy: 50
-			Wood: 50
-			Steel: 50
-			Concrete: 40
+			Heavy: 100
+			Wood: 100
+			Steel: 100
+			Concrete: 90
 			Drone: 200
 			Rocket: 100
 		DamageTypes: ElectroDeath

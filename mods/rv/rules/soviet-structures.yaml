@@ -14,11 +14,11 @@ nacnst:
 	ProvidesPrerequisite@soviets:
 		Prerequisite: structures.soviets
 	Health:
-		HP: 1000
+		HP: 800
 	Armor:
 		Type: Concrete
 	RevealsShroud:
-		Range: 8c0
+		Range: 4c0
 	Valued:
 		Cost: 2000
 	Production:
@@ -209,7 +209,7 @@ nahand:
 		Palette: mouse
 		IsPlayerPalette: false
 	Power:
-		Amount: -20
+		Amount: -35
 	ConditionManager:
 	InfiltrateForSupportPower:
 		Types: SpyInfiltrate
@@ -252,7 +252,7 @@ narefn:
 		DockAngle: 160
 		UseStorage: false
 	CustomSellValue:
-		Value: 300
+		Value: 400
 	InfiltrateForCash:
 		Types: SpyInfiltrate
 		Percentage: 50
@@ -277,6 +277,8 @@ narefn:
 		Amount: -50
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
+	-SpawnActorsOnSell@soviets:
+	-SpawnActorsOnSell@allies:
 
 naradr:
 	Inherits: ^Building
@@ -669,7 +671,7 @@ nayard:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 	Power:
-		Amount: -20
+		Amount: -50
 	WithIdleOverlay@crane:
 		Sequence: idle-crane
 		PauseOnCondition: chronodisable
@@ -781,7 +783,7 @@ nadept:
 	ProductionBar:
 		ProductionType: Aircraft.Soviets
 	Power:
-		Amount: -25
+		Amount: -50
 
 nanrct:
 	Inherits: ^Building
@@ -1133,7 +1135,7 @@ naflak:
 	Armor:
 		Type: Steel
 	RevealsShroud:
-		Range: 6c0
+		Range: 7c0
 	Selectable:
 		Bounds: 46, 62, 0, -20
 	Turreted:
@@ -1170,7 +1172,7 @@ tesla:
 		Queue: Support.Soviets
 		BuildPaletteOrder: 50
 		Prerequisites: naradr
-		Description: Advanced base defense.\nRequires power to operate.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
+		Description: Advanced base defense.\nCan be buffed or made work during low power by Tesla Troopers.\nRequires power to operate.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
 	Valued:
 		Cost: 1200
 	Tooltip:
