@@ -174,7 +174,7 @@ namespace OpenRA.Mods.RA2.Traits
 
             var transports = order.OrderString == "EnterTransports";
             self.SetTargetLine(order.Target, Color.Green);
-            self.QueueActivity(new EnterGarrison(self, targetActor, transports ? Info.MaxAlternateTransportAttempts : 0, !transports));
+            self.QueueActivity(new EnterGarrisonLegacy(self, targetActor, transports ? Info.MaxAlternateTransportAttempts : 0, !transports));
         }
 
         public bool Reserve(Actor self, Garrison garrison)
