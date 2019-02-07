@@ -11,8 +11,6 @@ World:
 		DisableWorldSounds: true
 	ResourceType@Ore:
 		ValuePerUnit: 0
-	LuaScript:
-		Scripts: shellmap.lua
 	-StartGameNotification:
 
 crate:

@@ -158,14 +158,19 @@ namespace OpenRA.Mods.RA2.Traits
 
             // Enter orders are only valid for own/allied actors,
             // which are guaranteed to never be frozen.
-            // darky - frozen actor problem probably here.
-            if (order.Target.Type != TargetType.Actor)
-                return;
+            // if (order.Target.Type != TargetType.Actor)
+            //    return;
 
-            var targetActor = order.Target.Actor;
-            if (!CanEnter(self, targetActor))
-                return;
-
+            if (order.Target.Type == TargetType.Actor)
+            {
+                var targetActor = order.Target.Actor;
+                if (!CanEnter(self, targetActor))
+                    return;
+            }
+            else
+            {
+                var targetActor = order.Target.FrozenActor;
+            }
             //if (!IsCorrectGarrisonType(self, targetActor))
             //    return;
 
@@ -174,7 +179,7 @@ namespace OpenRA.Mods.RA2.Traits
 
             var transports = order.OrderString == "EnterTransports";
             self.SetTargetLine(order.Target, Color.Green);
-            self.QueueActivity(new EnterGarrisonLegacy(self, targetActor, transports ? Info.MaxAlternateTransportAttempts : 0, !transports));
+            self.QueueActivity(new EnterGarrison(self, order.Target));
         }
 
         public bool Reserve(Actor self, Garrison garrison)

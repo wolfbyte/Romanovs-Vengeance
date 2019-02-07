@@ -54,8 +54,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Activities\ChronoResourceTeleport.cs" />
-    <Compile Include="Activities\EnterAirstrikeMaster.cs" />
     <Compile Include="Activities\EnterGarrison.cs" />
+    <Compile Include="Activities\EnterAirstrikeMaster.cs" />
+    <Compile Include="Activities\EnterGarrisonOverride.cs" />
+    <Compile Include="Activities\EnterGarrisonLegacy.cs" />
     <Compile Include="Activities\Infect.cs" />
     <Compile Include="Activities\TeleportRA2.cs" />
     <Compile Include="Activities\UnloadGarrison.cs" />
