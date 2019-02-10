@@ -42,7 +42,7 @@ namespace OpenRA.Mods.RA2.Traits
         void INotifyGarrisonerEntered.OnGarrisonerEntered(Actor self, Actor garrisoner)
         {
             var newOwner = garrisoner.Owner;
-            if (self.Owner != originalOwner || self.Owner == newOwner)
+            if (self.Owner != originalOwner || self.Owner == newOwner || self.Owner.IsAlliedWith(garrisoner.Owner))
                 return;
 
             NeedChangeOwner(self, garrisoner, newOwner);
