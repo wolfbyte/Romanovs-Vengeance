@@ -33,7 +33,7 @@ namespace OpenRA.Mods.RA2.Traits
         [Desc("Use to set when to use alternate transports (Never, Force, Default, Always).",
             "Force - use force move modifier (Alt) to enable.",
             "Default - use force move modifier (Alt) to disable.")]
-        public readonly AlternateTransportsMode AlternateTransportsMode = AlternateTransportsMode.Force;
+        public readonly AlternateTransportsMode AlternateTransportsMode = AlternateTransportsMode.Default;
 
         [Desc("Number of retries using alternate transports.")]
         public readonly int MaxAlternateTransportAttempts = 1;

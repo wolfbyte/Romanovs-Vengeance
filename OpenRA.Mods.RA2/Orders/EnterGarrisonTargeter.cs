@@ -25,7 +25,7 @@ namespace OpenRA.Mods.RA2.Orders
 
         public EnterGarrisonTargeter(string order, int priority,
             Func<Actor, Actor, bool> canTarget, Func<Actor, Actor, bool> useEnterCursor, OpenRA.Mods.RA2.Traits.AlternateTransportsMode mode)
-            : base(order, 7, "enter", true, true)
+            : base(order, priority, "enter", true, true)
         {
             this.canTarget = canTarget;
             this.useEnterCursor = useEnterCursor;
@@ -35,6 +35,22 @@ namespace OpenRA.Mods.RA2.Orders
         public override bool CanTargetActor(Actor self, Actor target, TargetModifiers modifiers, ref string cursor)
         {
             // TODO - darky - This is crap. Fix it. 
+            switch (mode)
+            {
+                case OpenRA.Mods.RA2.Traits.AlternateTransportsMode.None:
+                    return false;
+                case OpenRA.Mods.RA2.Traits.AlternateTransportsMode.Force:
+                    if (!modifiers.HasModifier(TargetModifiers.ForceMove))
+                        return false;
+                    break;
+                case OpenRA.Mods.RA2.Traits.AlternateTransportsMode.Default:
+                    if (modifiers.HasModifier(TargetModifiers.ForceMove))
+                        return false;
+                    break;
+                case OpenRA.Mods.RA2.Traits.AlternateTransportsMode.Always:
+                    break;
+            }
+
             if ((target.Owner.PlayerName == "Creeps" || target.Owner.PlayerName == "Neutral" || self.Owner.IsAlliedWith(target.Owner)) && target.Info.HasTraitInfo<T>())
             {
                 cursor = useEnterCursor(self, target) ? "enter" : "enter-blocked";
