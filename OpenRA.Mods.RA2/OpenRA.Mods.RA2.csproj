@@ -56,17 +56,23 @@
     <Compile Include="Activities\ChronoResourceTeleport.cs" />
     <Compile Include="Activities\EnterAirstrikeMaster.cs" />
     <Compile Include="Activities\EnterGarrison.cs" />
+    <Compile Include="Activities\FlyG2.cs" />
     <Compile Include="Activities\HeliDeployForGrantedCondition.cs" />
+    <Compile Include="Activities\HeliFlyG2.cs" />
     <Compile Include="Activities\HeliUndeployForGrantedCondition.cs" />
     <Compile Include="Activities\Infect.cs" />
     <Compile Include="Activities\TeleportRA2.cs" />
     <Compile Include="Activities\UnloadGarrison.cs" />
     <Compile Include="FileSystem\BagFileHack.cs" />
+    <Compile Include="Orders\AircraftMoveG2OrderTargeter.cs" />
     <Compile Include="Orders\EnterGarrisonOrderTargeter.cs" />
     <Compile Include="TraitsInterfaces.cs" />
+    <Compile Include="Traits\AircraftG3.cs" />
+    <Compile Include="Traits\AircraftG2.cs" />
     <Compile Include="Traits\AirstrikeMaster.cs" />
     <Compile Include="Traits\AirstrikeSlave.cs" />
     <Compile Include="Traits\AttackGarrisonedRV.cs" />
+    <Compile Include="Traits\AttackMoveG2.cs" />
     <Compile Include="Traits\ChangeOwner.cs" />
     <Compile Include="Traits\ChangeOwnerOnGarrisoner.cs" />
     <Compile Include="Traits\ChronoResourceDelivery.cs" />
@@ -88,6 +94,9 @@
     <Compile Include="Traits\MissileSpawnerMaster.cs" />
     <Compile Include="Traits\MissileSpawnerSlave.cs" />
     <Compile Include="Traits\PortableChronoRA2.cs" />
+    <Compile Include="Traits\RearmableG2.cs" />
+    <Compile Include="Traits\RepairableG2.cs" />
+    <Compile Include="Traits\ReservableG2.cs" />
     <Compile Include="Traits\ShootableBallisticMissile.cs" />
     <Compile Include="Traits\SpawnedExplodes.cs" />
     <Compile Include="Traits\CarrierSlave.cs" />
@@ -98,22 +107,14 @@
     <Compile Include="Warheads\LegacySpreadWarhead.cs" />
   </ItemGroup>
   <Target Name="AfterBuild">
-    <MakeDir Directories="$(SolutionDir)mods\rv\"/>
-    <Copy
-      SourceFiles="$(TargetPath)"
-      DestinationFolder="$(SolutionDir)mods\rv\"/>
+    <MakeDir Directories="$(SolutionDir)mods\rv\" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(SolutionDir)mods\rv\" />
     <!--
         csc generates .pdb symbol files (not `.dll.pdb`).
         mcs generates .dll.mdb symbol files.
     -->
-    <Copy
-      SourceFiles="$(TargetDir)$(TargetName).pdb"
-      DestinationFolder="$(SolutionDir)mods\rv\"
-      Condition="Exists('$(TargetDir)$(TargetName).pdb')"/>
-    <Copy
-      SourceFiles="$(TargetPath).mdb"
-      DestinationFolder="$(SolutionDir)mods\rv\"
-      Condition="Exists('$(TargetDir)$(TargetName).mdb')"/>
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(SolutionDir)mods\rv\" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+    <Copy SourceFiles="$(TargetPath).mdb" DestinationFolder="$(SolutionDir)mods\rv\" Condition="Exists('$(TargetDir)$(TargetName).mdb')" />
   </Target>
   <ItemGroup>
     <ProjectReference Include="..\engine\OpenRA.Game\OpenRA.Game.csproj">

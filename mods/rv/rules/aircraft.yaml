@@ -271,6 +271,121 @@ orca:
 	SpawnActorOnDeath:
 		Actor: orcahusk
 	HitShape:
+	
+
+orca2:
+	Inherits: ^Plane
+	-Aircraft
+	ConditionManager:
+	BodyOrientation:
+		QuantizedFacings: 0
+		CameraPitch: 90
+		UseClassicPerspectiveFudge: false
+	AircraftG2:
+		TurnSpeed: 5
+		Speed: 210
+	DamagedByTintedCells:
+		RequiresCondition: !airborne
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Harrier 2
+	Buildable:
+		Queue: Aircraft.Allies
+		Prerequisites: ~techlevel.2
+		BuildPaletteOrder: 20
+		Description: Fast assault fighter\n  Strong vs Buildings, Vehicles\n  Weak vs Infantry, Aircraft
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Selectable:
+		Bounds: 30,24
+	Health:
+		HP: 150
+	Armor:
+		Type: Light
+	RevealsShroud:
+		Range: 10c0
+		Type: GroundPosition
+	RevealsShroudToIntelligenceOwner:
+		Range: 10c0
+		Types: SatelliteScan
+		Type: GroundPosition
+	Repairable:
+		Voice: Move
+		RepairBuildings: gadept, nadept, caoutp
+	Rearmable:
+		RearmActors: gaairc
+	AmmoPool:
+		Ammo: 2
+		PipCount: 2
+		PipType: Ammo
+		PipTypeEmpty: AmmoEmpty
+		AmmoCondition: ammo
+	RenderSprites:
+		Image: falc
+	RenderVoxels:
+		Image: falc
+	SpawnActorOnDeath:
+		Actor: orcahusk
+	HitShape:
+
+	
+orca2:
+	Inherits: ^Plane
+	-Aircraft
+	ConditionManager:
+	BodyOrientation:
+		QuantizedFacings: 0
+		CameraPitch: 90
+		UseClassicPerspectiveFudge: false
+	AircraftG3:
+		TurnSpeed: 5
+		Speed: 210
+	DamagedByTintedCells:
+		RequiresCondition: !airborne
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Harrier 3
+	Buildable:
+		Queue: Aircraft.Allies
+		Prerequisites: ~techlevel.2
+		BuildPaletteOrder: 20
+		Description: Fast assault fighter\n  Strong vs Buildings, Vehicles\n  Weak vs Infantry, Aircraft
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Selectable:
+		Bounds: 30,24
+	Health:
+		HP: 150
+	Armor:
+		Type: Light
+	RevealsShroud:
+		Range: 10c0
+		Type: GroundPosition
+	RevealsShroudToIntelligenceOwner:
+		Range: 10c0
+		Types: SatelliteScan
+		Type: GroundPosition
+	Repairable:
+		Voice: Move
+		RepairBuildings: gadept, nadept, caoutp
+	Rearmable:
+		RearmActors: gaairc
+	AmmoPool:
+		Ammo: 2
+		PipCount: 2
+		PipType: Ammo
+		PipTypeEmpty: AmmoEmpty
+		AmmoCondition: ammo
+	RenderSprites:
+		Image: falc
+	RenderVoxels:
+		Image: falc
+	SpawnActorOnDeath:
+		Actor: orcahusk
+	HitShape:
+	
 
 orcahusk:
 	Inherits: ^PlaneHusk
