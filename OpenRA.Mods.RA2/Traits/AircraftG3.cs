@@ -121,7 +121,7 @@ namespace OpenRA.Mods.RA2.Traits
 		//public int GetInitialFacing() { return InitialFacing; }
 		//public WDist GetCruiseAltitude() { return CruiseAltitude; }
 
-		//public virtual object Create(ActorInitializer init) { return new AircraftG3(init, this); }
+		new public virtual object Create(ActorInitializer init) { return new AircraftG3(init, this); }
 
 		IEnumerable<object> IActorPreviewInitInfo.ActorPreviewInits(ActorInfo ai, ActorPreviewType type)
 		{
@@ -173,12 +173,12 @@ namespace OpenRA.Mods.RA2.Traits
 	{
 		static readonly Pair<CPos, SubCell>[] NoCells = { };
 
-		public readonly AircraftInfo Info;
+		new public readonly AircraftInfo Info;
 		readonly Actor self;
 
-		RepairableG2Info repairableInfo;
+		//RepairableInfo repairableInfo;
 		RearmableInfo rearmableInfo;
-		//AttackMoveG2 attackMove;
+		//AttackMove attackMove;
 		ConditionManager conditionManager;
 		IDisposable reservation;
 		IEnumerable<int> speedModifiers;
@@ -232,9 +232,9 @@ namespace OpenRA.Mods.RA2.Traits
 			Created(self);
 		}
 
-		//new protected virtual void Created(Actor self)
+		//new protected virtual void Created(Actor self) : base(self)
 		//{
-		//	repairableInfo = self.Info.TraitInfoOrDefault<RepairableG2Info>();
+		//	repairableInfo = self.Info.TraitInfoOrDefault<RepairableInfo>();
 		//	rearmableInfo = self.Info.TraitInfoOrDefault<RearmableInfo>();
 		//	attackMove = self.TraitOrDefault<AttackMove>();
 		//	conditionManager = self.TraitOrDefault<ConditionManager>();
@@ -471,14 +471,15 @@ namespace OpenRA.Mods.RA2.Traits
 		//		self.QueueActivity(new TakeOff(self));
 		//}
 
-		new public bool AircraftCanEnter(Actor a)
-		{
-			if (self.AppearsHostileTo(a))
-				return false;
-
-			return (rearmableInfo != null && rearmableInfo.RearmActors.Contains(a.Info.Name))
-				|| (repairableInfo != null && repairableInfo.RepairBuildings.Contains(a.Info.Name));
-		}
+		//new public bool AircraftCanEnter(Actor a)
+		//{
+		//	if (self.AppearsHostileTo(a))
+		//		return false;
+		//	var rearmableInfo = self.Info.TraitInfoOrDefault<RearmableInfo>();
+		//	//var repairableInfo = self.Info.TraitInfoOrDefault<RepairableInfo>();
+		//	return (rearmableInfo != null && rearmableInfo.RearmActors.Contains(a.Info.Name))
+		//		|| (repairableInfo != null && base.repairableInfo.RepairBuildings.Contains(a.Info.Name));
+		//}
 
 		new public int MovementSpeed
 		{
@@ -510,16 +511,16 @@ namespace OpenRA.Mods.RA2.Traits
 			return Info.LandableTerrainTypes.Contains(type);
 		}
 
-		new public virtual IEnumerable<Activity> GetResupplyActivities(Actor a)
-		{
-			var name = a.Info.Name;
-			if (rearmableInfo != null && rearmableInfo.RearmActors.Contains(name))
-				yield return new Rearm(self, a, WDist.Zero);
+		//new public virtual IEnumerable<Activity> GetResupplyActivities(Actor a)
+		//{
+		//	var name = a.Info.Name;
+		//	if (rearmableInfo != null && rearmableInfo.RearmActors.Contains(name))
+		//		yield return new Rearm(self, a, WDist.Zero);
 
-			// The ResupplyAircraft activity guarantees that we're on the helipad
-			if (repairableInfo != null && repairableInfo.RepairBuildings.Contains(name))
-				yield return new Repair(self, a, WDist.Zero);
-		}
+		//	// The ResupplyAircraft activity guarantees that we're on the helipad
+		//	if (repairableInfo != null && repairableInfo.RepairBuildings.Contains(name))
+		//		yield return new Repair(self, a, WDist.Zero);
+		//}
 
 		new public void ModifyDeathActorInit(Actor self, TypeDictionary init)
 		{
@@ -718,7 +719,7 @@ namespace OpenRA.Mods.RA2.Traits
 			get
 			{
 				yield return new EnterAlliedActorTargeter<BuildingInfo>("Enter", 5,
-					target => AircraftCanEnter(target), target => ReservableG2.IsAvailableFor(target, self));
+					target => AircraftCanEnter(target), target => Reservable.IsAvailableFor(target, self));
 
 				yield return new AircraftMoveOrderTargeter(Info);
 			}
@@ -774,9 +775,9 @@ namespace OpenRA.Mods.RA2.Traits
 				var target = Target.FromCell(self.World, cell);
 
 				self.SetTargetLine(target, Color.Green);
-
+				// darky - This is the main place to make changes
 				if (!Info.CanHover)
-					self.QueueActivity(order.Queued, new FlyG2(self, target));
+					self.QueueActivity(order.Queued, new Fly(self, target));
 				else
 					self.QueueActivity(order.Queued, new HeliFlyAndLandWhenIdle(self, target, Info));
 			}
