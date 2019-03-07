@@ -67,6 +67,7 @@
     <Compile Include="Orders\AircraftMoveG2OrderTargeter.cs" />
     <Compile Include="Orders\EnterGarrisonOrderTargeter.cs" />
     <Compile Include="TraitsInterfaces.cs" />
+    <Compile Include="Traits\AircraftG4.cs" />
     <Compile Include="Traits\AircraftG3.cs" />
     <Compile Include="Traits\AircraftG2.cs" />
     <Compile Include="Traits\AirstrikeMaster.cs" />
