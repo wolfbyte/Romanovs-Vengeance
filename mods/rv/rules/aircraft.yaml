@@ -284,7 +284,7 @@ orca3:
 		CameraPitch: 90
 		UseClassicPerspectiveFudge: false
 	AircraftG4:
-		TurnSpeed: 5
+		TurnSpeed: 3
 		Speed: 210
 		CruiseAltitude: 5600
 		CruisingCondition: cruising
@@ -296,6 +296,7 @@ orca3:
 		CanHover: False
 		HoverLand: True
 		TurnToLand: False
+		Repulsable: False
 	Armament:
 		Weapon: Maverick
 		PauseOnCondition: !ammo

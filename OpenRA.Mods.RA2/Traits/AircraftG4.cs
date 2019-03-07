@@ -99,7 +99,15 @@ namespace OpenRA.Mods.RA2.Traits
 					return;
 
 				if (Info.TakeOffOnCreation)
-					self.QueueActivity(new TakeOff(self));
+				{
+					if (Info.VTOL)
+					{
+						var rp =  host.TraitOrDefault<RallyPoint>();
+						self.QueueActivity(new HeliFlyAndLandWhenIdle(self,Target.FromCell(self.World,rp.Location),Info));
+					}
+					else
+						self.QueueActivity(new TakeOff(self));
+				}
 			}
 
 			// Add land activity if LandOnCondidion resolves to true and the actor can land at the current location.
@@ -156,7 +164,8 @@ namespace OpenRA.Mods.RA2.Traits
 		}
 
 		#region Implement IMove
-
+		// darky - This is called when another actor wants to use the landing zone
+		// darky - This is called at spawn
 		new public Activity MoveTo(CPos cell, int nearEnough)
 		{
 			if (!Info.CanHover && !Info.VTOL)
@@ -252,7 +261,7 @@ namespace OpenRA.Mods.RA2.Traits
 			if (order.OrderString == "Move")
 			{
 				var cell = self.World.Map.Clamp(order.TargetLocation);
-
+				var altitude = self.World.Map.DistanceAboveTerrain(CenterPosition);
 				if (!Info.MoveIntoShroud && !self.Owner.Shroud.IsExplored(cell))
 					return;
 
@@ -264,7 +273,10 @@ namespace OpenRA.Mods.RA2.Traits
 				self.SetTargetLine(target, Color.Green);
 				// darky - This is the main place to make changes
 				// darky -  Check if we have a condition here. I wish to check the conditionManager to see if we are landed. If we are landed, queue HeliFly, otherwise, queue fly
-				self.QueueActivity(order.Queued, new Fly(self, target));
+				if(altitude.Length == 0)
+					self.QueueActivity(order.Queued, new HeliFlyAndLandWhenIdle(self, target, Info));
+				else
+					self.QueueActivity(order.Queued, new Fly(self, target));
 				//if (!Info.CanHover)
 				//	self.QueueActivity(order.Queued, new Fly(self, target));
 					
@@ -284,7 +296,7 @@ namespace OpenRA.Mods.RA2.Traits
 				var targetActor = order.Target.Actor;
 				if (!Reservable.IsAvailableFor(targetActor, self))
 				{ // darky
-					if (!Info.CanHover || !Info.HoverLand)
+					if (!Info.CanHover && !Info.HoverLand)
 						self.QueueActivity(new ReturnToBase(self, Info.AbortOnResupply));
 					else
 						self.QueueActivity(new HeliReturnToBase(self, Info.AbortOnResupply));
