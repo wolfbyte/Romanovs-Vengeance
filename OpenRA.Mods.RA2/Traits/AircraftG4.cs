@@ -98,6 +98,7 @@ namespace OpenRA.Mods.RA2.Traits
 				if (host == null)
 					return;
 
+				// Darky Mods here - #DM001
 				if (Info.TakeOffOnCreation)
 				{
 					if (Info.VTOL)
@@ -166,6 +167,7 @@ namespace OpenRA.Mods.RA2.Traits
 		#region Implement IMove
 		// darky - This is called when another actor wants to use the landing zone
 		// darky - This is called at spawn
+		// darky - #DM002
 		new public Activity MoveTo(CPos cell, int nearEnough)
 		{
 			if (!Info.CanHover && !Info.VTOL)

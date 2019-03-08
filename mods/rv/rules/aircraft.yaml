@@ -200,6 +200,8 @@ zephusk:
 	BodyOrientation:
 		UseClassicPerspectiveFudge: false
 
+		
+
 orca:
 	Inherits: ^Plane
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -272,6 +274,125 @@ orca:
 		Actor: orcahusk
 	HitShape:
 
+	
+schp:
+	Inherits: ^Helicopter
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@MC: ^MindControllable
+	Inherits@RADIATON: ^DamagedByRadiation50Percent
+	DamagedByTintedCells:
+		RequiresCondition: !airborne
+	Tooltip:
+		Name: Siege Chopper
+	Selectable:
+		Bounds: 70,60,0,-20
+	Health:
+		HP: 250
+	Armor:
+		Type: Light
+	Armament@primary:
+		Weapon: SiegeChopperCannon
+		PauseOnCondition: !undeployed
+		RequiresCondition: !rank-elite
+	Armament@elite:
+		Weapon: SiegeChopperCannonE
+		PauseOnCondition: !undeployed
+		RequiresCondition: rank-elite
+	Armament@deployed:
+		Weapon: 160mm
+		LocalOffset: 768,0,2048
+		PauseOnCondition: !deployed
+		RequiresCondition: !rank-elite
+	Armament@elite-deployed:
+		Weapon: 160mmE
+		LocalOffset: 768,0,2048
+		PauseOnCondition: !deployed
+		RequiresCondition: rank-elite
+	Turreted:
+		TurnSpeed: 5
+	Voiced:
+		VoiceSet: SiegeChopperVoice
+	Buildable:
+		Queue: Aircraft.Soviets
+		BuildPaletteOrder: 20
+		Prerequisites: naradr, ~techlevel.2
+		Description: Helicopter capable of deploying into a long range artillery.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Valued:
+		Cost: 1500
+	RevealsShroud:
+		Range: 8c0
+		Type: GroundPosition
+	RevealsShroudToIntelligenceOwner:
+		Range: 8c0
+		Types: SatelliteScan
+		Type: GroundPosition
+	AttackAircraft:
+		Voice: Attack
+		PauseOnCondition: !undeployed || emp
+	AttackTurreted:
+		Voice: DeployedAttack
+		PauseOnCondition: !deployed || emp
+	-Aircraft
+	AircraftG4:
+		CruiseAltitude: 3072
+		LandWhenIdle: false
+		LandableTerrainTypes: Clear, Rough, Road, DirtRoad, Ore, Gems
+		TurnSpeed: 10
+		Speed: 140
+		AltitudeVelocity: 120
+		CruisingCondition: cruising
+		LandOnCondition: deployed || emp
+		Voice: Move
+		AirborneCondition: airborne
+		CanHover: True
+		VTOL: true
+	HeliGrantConditionOnDeploy:
+		Facing: 160
+		BodyNames: dot
+		DeployAnimation: deploy
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		DeploySound: vchodepa.wav
+		UndeploySound: vchodepa.wav
+		AllowedTerrainTypes: Clear, Rough, Road, DirtRoad, Ore, Gems
+		CanDeployOnRamps: true
+		SynchronizeDeployment: True
+		PauseOnCondition: emp
+	WithSpriteBody@dot:
+		Sequence: dot
+		Name: dot
+	RenderSprites:
+	Repairable:
+		Voice: Move
+		RepairBuildings: gadept, nadept, caoutp
+	Targetable@MC:
+		RequiresCondition: !controlled && !permamc && !airborne
+	RejectsOrders@deployment:
+		Reject: Move
+		RequiresCondition: deployed
+	WithVoxelHelicopterBody:
+		TickRate: 1
+		ShowShadow: false
+		RequiresCondition: undeployed
+	WithFacingSpriteBody:
+		Sequence: shadow
+		ForceToGround: true
+		RequiresCondition: undeployed
+	WithVoxelBody:
+		Sequence: deployed
+		RequiresCondition: deployed
+	WithVoxelTurret:
+		RequiresCondition: deployed
+	Hovers@CRUISING:
+		RequiresCondition: cruising
+		OffsetModifier: -45
+	SpawnActorOnDeath:
+		Actor: schphusk
+	HitShape:
+
 orca3:
 	Inherits: ^Plane
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -289,7 +410,6 @@ orca3:
 		CruiseAltitude: 5600
 		CruisingCondition: cruising
 		AltitudeVelocity: 120
-		MaximumPitch: 128
 		LandWhenIdle: false
 		TakeOffOnCreation: true
 		VTOL: True
@@ -706,119 +826,6 @@ spyphusk:
 		Image: spyp
 	FallsToEarth:
 		Explosion: UnitExplode
-
-schp:
-	Inherits: ^Helicopter
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@MC: ^MindControllable
-	Inherits@RADIATON: ^DamagedByRadiation50Percent
-	DamagedByTintedCells:
-		RequiresCondition: !airborne
-	Tooltip:
-		Name: Siege Chopper
-	Selectable:
-		Bounds: 70,60,0,-20
-	Health:
-		HP: 250
-	Armor:
-		Type: Light
-	Armament@primary:
-		Weapon: SiegeChopperCannon
-		PauseOnCondition: !undeployed
-		RequiresCondition: !rank-elite
-	Armament@elite:
-		Weapon: SiegeChopperCannonE
-		PauseOnCondition: !undeployed
-		RequiresCondition: rank-elite
-	Armament@deployed:
-		Weapon: 160mm
-		LocalOffset: 768,0,2048
-		PauseOnCondition: !deployed
-		RequiresCondition: !rank-elite
-	Armament@elite-deployed:
-		Weapon: 160mmE
-		LocalOffset: 768,0,2048
-		PauseOnCondition: !deployed
-		RequiresCondition: rank-elite
-	Turreted:
-		TurnSpeed: 5
-	Voiced:
-		VoiceSet: SiegeChopperVoice
-	Buildable:
-		Queue: Aircraft.Soviets
-		BuildPaletteOrder: 20
-		Prerequisites: naradr, ~techlevel.2
-		Description: Helicopter capable of deploying into a long range artillery.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Valued:
-		Cost: 1500
-	RevealsShroud:
-		Range: 8c0
-		Type: GroundPosition
-	RevealsShroudToIntelligenceOwner:
-		Range: 8c0
-		Types: SatelliteScan
-		Type: GroundPosition
-	AttackAircraft:
-		Voice: Attack
-		PauseOnCondition: !undeployed || emp
-	AttackTurreted:
-		Voice: DeployedAttack
-		PauseOnCondition: !deployed || emp
-	Aircraft:
-		CruiseAltitude: 3072
-		LandWhenIdle: false
-		LandableTerrainTypes: Clear, Rough, Road, DirtRoad, Ore, Gems
-		TurnSpeed: 10
-		Speed: 140
-		AltitudeVelocity: 120
-		CruisingCondition: cruising
-		LandOnCondition: deployed || emp
-	HeliGrantConditionOnDeploy:
-		Facing: 160
-		BodyNames: dot
-		DeployAnimation: deploy
-		DeployedCondition: deployed
-		UndeployedCondition: undeployed
-		DeploySound: vchodepa.wav
-		UndeploySound: vchodepa.wav
-		AllowedTerrainTypes: Clear, Rough, Road, DirtRoad, Ore, Gems
-		CanDeployOnRamps: true
-		SynchronizeDeployment: True
-		PauseOnCondition: emp
-	WithSpriteBody@dot:
-		Sequence: dot
-		Name: dot
-	RenderSprites:
-	Repairable:
-		Voice: Move
-		RepairBuildings: gadept, nadept, caoutp
-	Targetable@MC:
-		RequiresCondition: !controlled && !permamc && !airborne
-	RejectsOrders@deployment:
-		Reject: Move
-		RequiresCondition: deployed
-	WithVoxelHelicopterBody:
-		TickRate: 1
-		ShowShadow: false
-		RequiresCondition: undeployed
-	WithFacingSpriteBody:
-		Sequence: shadow
-		ForceToGround: true
-		RequiresCondition: undeployed
-	WithVoxelBody:
-		Sequence: deployed
-		RequiresCondition: deployed
-	WithVoxelTurret:
-		RequiresCondition: deployed
-	Hovers@CRUISING:
-		RequiresCondition: cruising
-		OffsetModifier: -45
-	SpawnActorOnDeath:
-		Actor: schphusk
-	HitShape:
 
 schphusk:
 	Inherits: ^HelicopterHusk

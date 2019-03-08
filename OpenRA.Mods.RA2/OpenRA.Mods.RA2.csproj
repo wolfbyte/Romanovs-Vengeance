@@ -70,6 +70,7 @@
     <Compile Include="Traits\AircraftG4.cs" />
     <Compile Include="Traits\AircraftG3.cs" />
     <Compile Include="Traits\AircraftG2.cs" />
+    <Compile Include="Traits\AircraftG5.cs" />
     <Compile Include="Traits\AirstrikeMaster.cs" />
     <Compile Include="Traits\AirstrikeSlave.cs" />
     <Compile Include="Traits\AttackGarrisonedRV.cs" />
