@@ -219,9 +219,20 @@ orca:
 		Description: Fast assault fighter\n  Strong vs Buildings, Vehicles\n  Weak vs Infantry, Aircraft
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	Aircraft:
+	-Aircraft
+	AircraftRV:
 		TurnSpeed: 5
 		Speed: 210
+		CruiseAltitude: 5600
+		CruisingCondition: cruising
+		AltitudeVelocity: 120
+		LandWhenIdle: false
+		TakeOffOnCreation: true
+		VTOL: True
+		CanHover: False
+		TurnToLand: False
+		Repulsable: False
+		Voice: Move
 	Selectable:
 		Bounds: 30,24
 	Health:
